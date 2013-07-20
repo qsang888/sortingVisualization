@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+  div {
+    background: grey;
+    border: solid 1px #ccc;
+    padding: 20px;
+    margin: 20px;
+  }
+
+</style>
+<div>update</div>
+<div>exit</div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+  var duration_update = 1000;
+  var duration_exit   = 1000;
+  var duration_enter  = 1000;
+
+  var div = d3.select("body").selectAll("div")
+      .data(["enter", "update","hello"], function(d) { return d || this.textContent; });
+
+  console.log(div);
+
+  //notes: update before enter
+  
+
+  // 3. enter
+  var enterTransition = d3.transition().duration(duration_enter).each(function() {
+    div.enter().append("div")
+        .text(function(d) { return d; })
+        .style("opacity", 0)
+      .transition()
+        .style("background", "green")
+        .style("opacity", 1);
+  });
+
+  // 2. update
+  var updateTransition = enterTransition.transition().duration(duration_update).each(function() {
+    div.transition()
+        .style("background", "orange");
+  });
+
+  // 1. exit
+  var exitTransition = enterTransition.transition().duration(duration_exit).each(function() {
+    div.exit()
+        .style("background", "red")
+      .transition()
+        .style("opacity", 0)
+        .remove();
+  });
+</script>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/two.min.js"></script>
+	<script src="js/backbone.js"></script>
+	<script src="js/underscore.js"></script>
+	<script src="js/events.js"></script>
+  <script src="http://d3js.org/d3.v2.min.js?2.10.1"></script>
+
+  <style>
+      div.bar {
+        display: inline-block;
+        width: 20px;
+        height: 75px;
+        margin-right: 2px;
+        background-color: green;
+        
+      }
+  </style>
+  </head>
+  <body>
+
+    <script>
+
+      // var dataset = [ 5, 10, 15, 20,30];
+      // var dataset = [25, 7, 5, 26, 11, 8, 25, 14, 23, 19,
+      //           14, 11, 22, 29, 11, 13, 12, 17, 18, 10,
+      //           24, 18, 25, 9, 3];
+      var dataset = [];
+      n = 30;
+      //random the number from {0, 1, 2..number_range}
+      number_range = 50;
+      number_median = number_range/2    
+      for (var i = 0; i < n; i++) {
+        var new_number = Math.round(Math.random()*number_range);
+        dataset = dataset.concat(new_number);
+      };
+      console.log('dataset',dataset);
+      console.log('number_median',number_median);
+      var first_bind = d3.select("body").selectAll("div")
+                          .data(dataset)
+                          .enter()
+                          .append("div")
+                          .attr("class", "bar")
+                          .style("background-color",function(d){
+                            if (d > number_median) {return "red"}
+                              else {return "black"}
+                          })
+                          .style("height",function(d){
+                            return d*5 +"px"
+                          });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/d3.v3.min.js"></script>
+
+    <style>
+      svg.pumpkin {
+        fill:"green"; 
+        stroke:"yellow";
+        stroke-width:"2" 
+      }
+    </style>
+  </head>
+  <body>
+    
+    <!-- Create the first SVG shape in D3 -->
+
+    
+
+    <script>
+      //Define Width and height;
+      //every rect must have x, y, width, and height values
+      //data-driven ---> height
+      //hegiht --> color rgb(0,0,0,0)
+
+      var w_svg = 900;
+      var h_svg = 600;
+      var number_data = 50;
+      var data_range = 20;
+      var bar_padding = 1;
+      var bar_height_minimum  = 15;
+      var data_counter = 0;
+      var bar_height_adjust = 50;
+
+
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", w_svg)
+                  .attr("height", h_svg);
+      
+      //generate random data
+      data_set = []; 
+      for (var i = 0; i < number_data; i++) {
+        var new_number = Math.round(Math.random()*data_range);
+        data_set = data_set.concat(new_number);
+      };
+
+      //map data to rect height
+      //sample rect <rect x="50" y="50" width="100" height="50"/>
+
+      var rects = svg.selectAll("svg")
+                     .data(data_set)
+                     .enter()
+                     .append("rect")
+                     .attr("x",function(d,i){
+                        return i*(w_svg/number_data);
+                      })
+                     .attr("y",function(d){
+                        return h_svg-d*bar_height_minimum - bar_height_adjust;
+                     })
+                     .attr("width",w_svg/number_data-bar_padding)
+                     .attr("height",function(d){
+                                return d*bar_height_minimum;
+                     })
+                     //height - > color 
+                    .attr("fill",function(d){
+                      return "rgb(0, 0, " + (d * 10) + ")";
+                    });
+
+      //add label <text x="400" y="250" font-family="sans-serif"font-size="15" fill="gray">first-set</text>
+
+      var labels = svg.selectAll("text")
+                       .data(data_set)
+                       .enter()
+                       .append("text")
+                       .text(function(d){
+                          return d;
+                        })
+                       .attr("x",function(d,i){
+                          return i*(w_svg/number_data);
+                        })
+                        .attr("y",function(d){
+                          return h_svg-d*bar_height_minimum+10 -bar_height_adjust;
+                        })
+                        .attr("font-family","sans-serif")
+                        .attr("font-size","10")
+                        .attr("fill","white");
+    </script>
+  </body>
+</html>
