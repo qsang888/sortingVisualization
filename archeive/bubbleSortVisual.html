@@ -3,7 +3,6 @@
   <head>
     <title>visual sorting in d3</title>
     <script src="js/d3.v3.min.js"></script>
-    <script src="js/backbone.js"></script>
 
     <style>
     text {
@@ -42,15 +41,13 @@
       var h_svg = 500;
       duration_update = 500
 
-      //draw canvas
+
       var svg = d3.select("body")
                   .append("svg")
                   .attr("width", w_svg)
                   .attr("height", h_svg)
 
-
-
-      //goal: bubble sort 
+      //goal: bubble sort [1,3,4,8,9]
       
       //generate data
       var number_data = 3
@@ -62,57 +59,6 @@
       
       console.log('data_process:',data_process)
       hightlight(data_process,0)
-
-
-      // Models
-      // var data_model = Backbone.Model.extend({
-      //   defaults: {
-      //     data_input:''
-      //   }
-      // });
-
-
-      // // Collections
-      // var data_collection = Backbone.Collection.extend({
-      //   model: data_model,
-        
-      //   initialize: function() {
-      //     this.fetch();
-      //   },
-      //   fetch: function() {
-      //     this.randomize();
-      //   },
-      //   randomize: function() {
-      //     var number_data = 3
-      //     data_process = []
-      //     for (var k = 0; k < number_data; k++) {
-      //       var random_pick = Math.round(100*Math.random())
-      //       data_process = data_process.concat(random_pick)
-      //     };
-
-      //   },
-      // });
-
-      // //view
-      // var data_view = Backbone.View.extend({
-
-      //   el:""
-
-      //   render: function() {
-      //     this.width = 1200
-      //     this.height = 500;
-
-      //     this.svg = d3.select(this.body).append("svg")
-      //                   .attr("width", this.width)
-      //                   .attr("height", this.height)
-
-      //     return this;
-      //   }
-
-      // });
-
-
-
       sort_update(data_process)
 
           
@@ -167,7 +113,17 @@
 
           },700)
 
-      
+      function done_sort(){
+                svg
+                  .append("text")
+                  .text("done sorting")
+                  .attr("x",100)
+                  .attr("y",300)
+                  .attr("font-family","sans-serif")
+                  .attr("font-size","10px")
+                  .attr("font-color","green")
+
+      }
              
 
       function sort_update(data){
@@ -237,18 +193,6 @@
           t = array[m], array[m] = array[i], array[i] = t;
         }
         return array;
-      }
-
-      function done_sort(){
-                svg
-                  .append("text")
-                  .text("done sorting")
-                  .attr("x",100)
-                  .attr("y",300)
-                  .attr("font-family","sans-serif")
-                  .attr("font-size","10px")
-                  .attr("font-color","green")
-
       }
 
     </script>
