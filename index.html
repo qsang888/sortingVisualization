@@ -39,7 +39,7 @@
     <script>
       var w_svg = 1200;
       var h_svg = 500;
-      duration_update = 500
+      duration_update = 400
 
       //draw canvas
       var svg = d3.select("body")
@@ -52,7 +52,7 @@
       //goal: bubble sort 
       
       //generate data
-      var number_data = 3
+      var number_data = 6
       data_process = []
       for (var k = 0; k < number_data; k++) {
         var random_pick = Math.round(100*Math.random())
@@ -117,7 +117,7 @@
           
       //start sorting
       // var sort_data = sort_update(data_start);
-      // console.log('sort_data',sort_data)
+      //console.log('sort_data',sort_data)
 
       var j = data_process.length
       var max_num = data_process[0];           
@@ -202,7 +202,7 @@
         }
 
       function hightlight(data, position) {
-            circle_radius = 10
+            circle_radius = 16
             var max_hightlight = svg.selectAll("circle")
                                     .data(data,function(d){return d});
 
