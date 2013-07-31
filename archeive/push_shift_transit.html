@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="http://mbostock.github.com/d3/d3.js?2.7.2"></script>
+
+
+<style>
+
+svg {
+  font: 10px sans-serif;
+}
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+    <div class = "graph"></div>
+     <p>
+  <label for="amount">Donation amount ($50 increments):</label>
+  <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+    </p>
+ 
+<div id="slider"></div>
+
+    
+<script>
+  $(function() {
+      $( "#slider" ).slider({
+      value:99,
+      min: 0,
+      max: 500,
+      step: 1,
+      slide: function( event, ui ) {
+          var slide_number = $( "#slider" ).slider( "value" )
+//          console.log('slide_number 3:',slide_number)
+          
+          if(ui.value >slide_number){
+              console.log('go right')
+              tick()
+          }else{
+            console.log('go left')
+            tick_left()
+          }  
+           
+        $( "#amount" ).val( "$" + ui.value );
+        var slide_number = ui.value 
+//        console.log('slide_number 2:',slide_number)
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+    var slide_number = $( "#slider" ).slider( "value" ) 
+//    console.log('slide_number:',slide_number)
+    
+var n = 20,
+    random = d3.random.normal(0, .2),
+    data = d3.range(n).map(random);
+
+var margin = {top: 10, right: 10, bottom: 20, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([0, n - 1])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .domain([-1, 1])
+    .range([height, 0]);
+
+var line = d3.svg.line()
+    .x(function(d, i) { return x(i); })
+    .y(function(d, i) { return y(d); });
+
+var svg = d3.select(".graph").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+  .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.svg.axis().scale(x).orient("bottom"));
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(d3.svg.axis().scale(y).orient("left"));
+
+var path = svg.append("g")
+    .attr("clip-path", "url(#clip)")
+  .append("path")
+    .data([data])
+    .attr("class", "line")
+    .attr("d", line);
+
+
+     
+
+function tick() {
+    
+  // push a new data point onto the back
+  data.push(random());
+
+  // redraw the line, and slide it to the left
+  path
+      .attr("d", line)
+      .attr("transform", null)
+    .transition()
+      .duration(500)
+      .ease("linear")
+      .attr("transform", "translate(" + x(-1) + ")")
+//      .each("end", tick);
+ 
+  svg.call(d3.svg.axis().scale(x).orient("bottom"));
+    
+  // pop the old data point off the front
+  data.shift();
+
+}
+
+function tick_left() {
+    
+  // push a new data point onto the back
+//  data.push(random());
+
+  // redraw the line, and slide it to the left
+  path
+      .attr("d", line)
+      .attr("transform", null)
+    .transition()
+      .duration(500)
+      .ease("linear")
+      .attr("transform", "translate(" + x(1) + ")")
+//      .each("end", tick);
+
+  // pop the old data point off the front
+  //data.shift();
+
+}      
+    });
+
+      
+</script>
