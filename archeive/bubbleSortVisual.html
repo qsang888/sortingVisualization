@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>visual sorting in d3</title>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/d3.v3.min.js"></script>
 
     <style>
     text {
@@ -50,7 +50,7 @@
       //goal: bubble sort [1,3,4,8,9]
       
       //generate data
-      var number_data = 3
+      var number_data = 10
       data_process = []
       for (var k = 0; k < number_data; k++) {
         var random_pick = Math.round(100*Math.random())
@@ -62,68 +62,58 @@
       sort_update(data_process)
 
           
-      //start sorting
-      // var sort_data = sort_update(data_start);
-      // console.log('sort_data',sort_data)
+          //start sorting
+          // var sort_data = sort_update(data_start);
+          // console.log('sort_data',sort_data)
 
-      var j = data_process.length
-      var max_num = data_process[0];           
-      var m = 1; //m point to the current max
+          var j = data_process.length
+          var max_num = data_process[0];           
+          var m = 1;
 
-      setInterval(function() {
+          setInterval(function() {
 
-              // console.log('m:',m)
-              // console.log('j:',j)
+                  // console.log('m:',m)
+                  // console.log('j:',j)
 
-              if (max_num < data_process[m]){
-                  max_num = data_process[m];
+                  if (max_num < data_process[m]){
+                      max_num = data_process[m];
 
-                  //update highlight max
+                      //update highlight max
 
-              }else{
-                //swap
-                  var temp          = data_process[m-1]
-                  data_process[m-1] = data_process[m]
-                  data_process[m]   = temp
+                  }else{
+                    //swap
+                      var temp          = data_process[m-1]
+                      data_process[m-1] = data_process[m]
+                      data_process[m]   = temp
 
-                  //update the swap transition, update max position as well
-              }
-              
-              //update screen
-              if (j>1) {
-                hightlight(data_process,m)
-                sort_update(data_process)
-                m++;
-              }
+                      //update the swap transition, update max position as well
+                  }
+                  
+                  //update screen
+                  if (j>1) {
+                    hightlight(data_process,m)
+                    sort_update(data_process)
+                    m++;
+                  }
 
-              //update the the cursor
-              if (m ==j){
-                max_num = data_process[0];           
-                m = 1;
-                hightlight(data_process,0);
-                j--; 
-              }
 
-              //done sorting
-              if (j==0) {
-                hightlight(data_process,0)
-                done_sort()
-              }
-              
+                  if (m ==j){
+                    max_num = data_process[0];           
+                    m = 1;
+                    hightlight(data_process,0);
+                    // console.log('max_num',max_num)
+                    // console.log('data_process[0]',data_process[0])
+                    // console.log('m',m)
+                    j--; 
+                  }
 
-          },700)
+                  if (j==0) {
+                    hightlight(data_process,0)
+                    console.log('done')
+                  }
+                  
 
-      function done_sort(){
-                svg
-                  .append("text")
-                  .text("done sorting")
-                  .attr("x",100)
-                  .attr("y",300)
-                  .attr("font-family","sans-serif")
-                  .attr("font-size","10px")
-                  .attr("font-color","green")
-
-      }
+              },700)
              
 
       function sort_update(data){

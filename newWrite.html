@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="js/d3.v3.min.js"></script>
+
+    <style>
+     
+    </style>
+  </head>
+  <body>
+    
+    <!-- Create the first SVG shape in D3 -->
+
+    
+
+    <script>
+     var w_svg = 900;
+     var h_svg = 600;
+        
+    data = [100,20,30,100]
+    
+    var svg = d3.select('body')
+                .append('svg')
+                .attr('width',w_svg)
+                .attr('height',h_svg);
+    
+    var label = svg.selectAll('text')
+                   .data(data);
+            label
+                   .enter()
+                   .append('text')
+                   .attr('x',function(d,i){return i*50})
+                   .attr('y',h_svg/2)
+                   .text(function(d) {return d});
+    </script>
+  </body>
+</html>

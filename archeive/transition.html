@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <title> transition | d3</title>
+    <script src="../js/d3.v3.min.js"></script>
+
+    <style>
+
+    </style>
+    
+  </head>
+  <body>
+    <!-- Create the first SVG shape in D3 -->
+    <!-- <p>Hello Sang</p> -->
+
+
+    <script>
+      //define parameter of stage
+      var w_svg = 700;
+      var h_svg = 500;
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", w_svg)
+                  .attr("height", h_svg);
+      
+      // var texts= svg.append("text")
+      //               .attr("x",300)
+      //               .attr("y",100)
+      //               .text("How are you?")
+      //               .transition()
+      //               .attr("x", 500)
+      //               .duration(750)
+      //               .ease("linear")
+      //               .each("end",function(){
+      //                 d3.select(this)
+      //                   .transition()
+      //                   .duration(750)
+      //                   .ease("linear")
+      //                   .attr("y", 300);
+      //               });
+      //important data
+      var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");        
+
+      var bar = svg.selectAll(".bar")
+                   .data(data, function(d) { return d.key; });
+
+      bar.enter().append("rect")
+          .attr("class", "bar")
+          // initialize entering bars
+
+      bar.transition()
+          .duration(750)
+          // transition entering + updating bars
+
+      bar.exit().transition()
+          .duration(750)
+          .remove()
+          // transition exiting bars
+
+      svg.select(".x.axis").transition()
+          .duration(750)
+          .call(xAxis);
+
+      svg.select(".y.axis").transition()
+          .duration(750)
+          .call(yAxis);
+
+
+    </script>
+  </body>
+</html>

@@ -1,18 +1,41 @@
-<div id="slider" class="slider">
-  <div class="knob"></div>
-</div>
-<div id="fontSize">Change the value, to change the fontsize.</div>
-
-<p>With the Slider it is damn easy to create stuff like an RGB-Color Selector which actually looks good.</p>
-
-<div id="red" class="advanced slider">
-  <div class="knob"></div>
-</div>
-<div id="green" class="advanced slider">
-  <div class="knob"></div>
-</div>
-<div id="blue" class="advanced slider">
-  <div class="knob"></div>
-</div>
-
-<p>Selected color: <span id="setColor"></span></p>
+<!doctype html>
+ 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>jQuery UI Slider - Snap to increments</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  
+  <script>
+  $(function() {
+    $( "#slider" ).slider({
+      value:127,
+      min: 0,
+      max: 500,
+      step: 1,
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.value );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+  });
+  </script>
+</head>
+<body>
+ 
+<p>
+  <label for="amount">Donation amount ($50 increments):</label>
+  <input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold;" />
+</p>
+ 
+<div id="slider"></div>
+    
+    <canvas id="canvas" width="400" height="300">
+    This text is displayed if your browser does not support HTML5 Canvas.
+   </canvas>
+ 
+ 
+</body>
+</html>

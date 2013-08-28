@@ -50,103 +50,105 @@
       //goal: bubble sort [1,3,4,8,9]
       
       //generate data
-      var number_data = 10
+      var number_data = 3
       data_process = []
       for (var k = 0; k < number_data; k++) {
         var random_pick = Math.round(100*Math.random())
-        data_process[k] = random_pick
+        data_process = data_process.concat(random_pick)
       };
       
-//      console.log('data_process:',data_process)
+      console.log('data_process:',data_process)
       hightlight(data_process,0)
       sort_update(data_process)
 
           
-          //start sorting
-          // var sort_data = sort_update(data_start);
-          // console.log('sort_data',sort_data)
+      //start sorting
+      // var sort_data = sort_update(data_start);
+      // console.log('sort_data',sort_data)
 
-          var j = data_process.length
-          var max_num = data_process[0];           
-          var m = 1;
+      var j = data_process.length
+      var max_num = data_process[0];           
+      var m = 1; //m point to the current max
 
-          setInterval(function() {
+      setInterval(function() {
 
-                  // console.log('m:',m)
-                  // console.log('j:',j)
+              // console.log('m:',m)
+              // console.log('j:',j)
 
-                  if (max_num < data_process[m]){
-                      max_num = data_process[m];
+              if (max_num < data_process[m]){
+                  max_num = data_process[m];
 
-                      //update highlight max
+                  //update highlight max
 
-                  }else{
-                    //swap
-                      var temp          = data_process[m-1]
-                      data_process[m-1] = data_process[m]
-                      data_process[m]   = temp
+              }else{
+                //swap
+                  var temp          = data_process[m-1]
+                  data_process[m-1] = data_process[m]
+                  data_process[m]   = temp
 
-                      //update the swap transition, update max position as well
-                  }
-                  
-                  //update screen
-                  if (j>1) {
-                    hightlight(data_process,m)
-                    sort_update(data_process)
-                    m++;
-                  }
+                  //update the swap transition, update max position as well
+              }
+              
+              //update screen
+              if (j>1) {
+                hightlight(data_process,m)
+                sort_update(data_process)
+                m++;
+              }
 
+              //update the the cursor
+              if (m ==j){
+                max_num = data_process[0];           
+                m = 1;
+                hightlight(data_process,0);
+                j--; 
+              }
 
-                  if (m ==j){
-                    max_num = data_process[0];           
-                    m = 1;
-                    hightlight(data_process,0);
-                    // console.log('max_num',max_num)
-                    // console.log('data_process[0]',data_process[0])
-                    // console.log('m',m)
-                    j--; 
-                  }
+              //done sorting
+              if (j==0) {
+                hightlight(data_process,0)
+                done_sort()
+              }
+              
 
-                  if (j==0) {
-                    hightlight(data_process,0)
-                    console.log('done')
-                  }
-                  
+          },700)
 
-              },700)
+      function done_sort(){
+                svg
+                  .append("text")
+                  .text("done sorting")
+                  .attr("x",100)
+                  .attr("y",300)
+                  .attr("font-family","sans-serif")
+                  .attr("font-size","10px")
+                  .attr("font-color","green")
+
+      }
              
 
       function sort_update(data){
           //input a new dataset
           //return an array, so the last element is always the largest
-           console.log('data:',data)
-           
+          // console.log('data:',data)
+
           var text = svg.selectAll("text")
-                        .data(data);
+                    .data(data,function(d){return d;});
 
-          console.log('text 1:',text)
           //update
-          text.transition()
+          text.attr("class", "update")
+              .transition()
               .duration(duration_update)
-              .attr("class", "update")
-              .attr("x",function(d, i) { return i * 100+100; })
-              .text(function(d){return d;});
-              
+              .attr("x",function(d, i) { return i * 100+100; });
 
-          console.log('text 2:',text)
-          
           //enter
-          text.enter()
-              .append("text")
+          text.enter().append("text")
               .transition()
               .duration(duration_update)
               .attr("class", "enter")
+              .text(function(d){return d;})
               .attr("x", function(d, i) { return i * 100+100; })
-              .attr("y",200)
-              .text(function(d){return d;});
+              .attr("y",200);
 
-          console.log('text 3:',text)
-          
           //exit 
           text.exit()
               .attr("class", "exit")
@@ -159,7 +161,7 @@
       function hightlight(data, position) {
             circle_radius = 10
             var max_hightlight = svg.selectAll("circle")
-                                    .data(data);
+                                    .data(data,function(d){return d});
 
           //update
           max_hightlight.attr("class", "max")

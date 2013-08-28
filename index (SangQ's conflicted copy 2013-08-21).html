@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+  <head>
+    <title>visual sorting in d3</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+    <style>
+    text {
+      font: bold 28px monospace;
+    }
+
+    .enter {
+      fill: green;
+    }
+
+    .update {
+      fill: blue;
+    }
+
+    .exit {
+      fill: red;
+    }
+
+    .max{
+      fill: brown;
+      font-family:sans-serif;
+      font-size:20px;
+      font-color:black;
+    }
+
+    </style>
+  </head>
+  <body>
+
+    <!-- Create the first SVG shape in D3 -->
+
+
+
+    <script>
+      var w_svg = 1200;
+      var h_svg = 500;
+      duration_update = 400
+
+      //draw canvas
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", w_svg)
+                  .attr("height", h_svg)
+
+
+
+      //goal: bubble sort
+
+      //generate data
+      var number_data = 4
+      data_process = []
+      for (var k = 0; k < number_data; k++) {
+        var random_pick = Math.round(100*Math.random())
+        data_process = data_process.concat(random_pick)
+      };
+
+      console.log('data_process:',data_process)
+      hightlight(data_process,0)
+
+
+      // Models
+      // var data_model = Backbone.Model.extend({
+      //   defaults: {
+      //     data_input:''
+      //   }
+      // });
+
+
+      // // Collections
+      // var data_collection = Backbone.Collection.extend({
+      //   model: data_model,
+
+      //   initialize: function() {
+      //     this.fetch();
+      //   },
+      //   fetch: function() {
+      //     this.randomize();
+      //   },
+      //   randomize: function() {
+      //     var number_data = 3
+      //     data_process = []
+      //     for (var k = 0; k < number_data; k++) {
+      //       var random_pick = Math.round(100*Math.random())
+      //       data_process = data_process.concat(random_pick)
+      //     };
+
+      //   },
+      // });
+
+      // //view
+      // var data_view = Backbone.View.extend({
+
+      //   el:""
+
+      //   render: function() {
+      //     this.width = 1200
+      //     this.height = 500;
+
+      //     this.svg = d3.select(this.body).append("svg")
+      //                   .attr("width", this.width)
+      //                   .attr("height", this.height)
+
+      //     return this;
+      //   }
+
+      // });
+
+
+
+      sort_update(data_process)
+
+
+      //start sorting
+      // var sort_data = sort_update(data_start);
+      //console.log('sort_data',sort_data)
+
+      var j = data_process.length
+      var max_num = data_process[0];
+      var m = 1; //m point to the current max
+
+      setInterval(function() {
+
+              // console.log('m:',m)
+              // console.log('j:',j)
+
+              if (max_num < data_process[m]){
+                  max_num = data_process[m];
+
+                  //update highlight max
+
+              }else{
+                //swap
+                  var temp          = data_process[m-1]
+                  data_process[m-1] = data_process[m]
+                  data_process[m]   = temp
+
+                  //update the swap transition, update max position as well
+              }
+
+              //update screen
+              if (j>1) {
+                hightlight(data_process,m)
+                sort_update(data_process)
+                m++;
+              }
+
+              //update the the cursor
+              if (m ==j){
+                max_num = data_process[0];
+                m = 1;
+                hightlight(data_process,0);
+                j--;
+              }
+
+              //done sorting
+              if (j==0) {
+                hightlight(data_process,0)
+                done_sort()
+              }
+
+
+          },700)
+
+
+
+
+      function sort_update(data){
+          //input a new dataset
+          //return an array, so the last element is always the largest
+          // console.log('data:',data)
+
+          var text = svg.selectAll("text")
+                    .data(data,function(d){return d;});
+
+          //update
+          text.attr("class", "update")
+              .transition()
+              .duration(duration_update)
+              .attr("x",function(d, i) { return i * 100+100; });
+
+          //enter
+          text.enter().append("text")
+              .transition()
+              .duration(duration_update)
+              .attr("class", "enter")
+              .text(function(d){return d;})
+              .attr("x", function(d, i) { return i * 100+100; })
+              .attr("y",200);
+
+          //exit
+          text.exit()
+              .attr("class", "exit")
+              .transition()
+              .duration(duration_update)
+              .remove();
+
+        }
+
+      function hightlight(data, position) {
+            circle_radius = 16
+            var max_hightlight = svg.selectAll("circle")
+                                    .data(data,function(d){return d});
+
+          //update
+          max_hightlight.attr("class", "max")
+                        .transition()
+                        .duration(duration_update)
+                        .attr("cx", position * 100+100)
+                        .attr("cy",150)
+                        .attr("r",circle_radius)
+                        .style("opacity",function(d, i) {
+                          if (i==position){return 1} return 0});
+
+
+            max_hightlight.enter()
+                          .append("circle")
+                          .attr("class", "max")
+                          .transition()
+                          .duration(duration_update)
+                          .attr("cx", position * 100+100)
+                          .attr("cy",150)
+                          .attr("r",circle_radius)
+                          .style("opacity",function(d, i) {
+                            if (i==position){return 1} return 0});
+        }
+
+      function shuffle(array) {
+        var m = array.length, t, i;
+        while (m) {
+          i = Math.floor(Math.random() * m--);
+          t = array[m], array[m] = array[i], array[i] = t;
+        }
+        return array;
+      }
+
+      function done_sort(){
+                svg
+                  .append("text")
+                  .text("done sorting")
+                  .attr("x",100)
+                  .attr("y",300)
+                  .attr("font-family","sans-serif")
+                  .attr("font-size","10px")
+                  .attr("font-color","green")
+
+      }
+
+    </script>
+  </body>
+</html>
